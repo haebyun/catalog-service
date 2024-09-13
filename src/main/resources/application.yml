@@ -9,3 +9,31 @@ server:
 
 polar:
   greeting: Welcome to thee local book catalog!
+
+spring:
+  application:
+    name: catalog-service
+  config:
+    import: "optional:configserver:"
+  cloud:
+    config:
+      uri: http://localhost:8888
+      request-connect-timeout: 5000
+      request-read-timeout: 5000
+      fail-fast: true
+      retry:
+        #시도의 최대 횟수
+        max-attempts: 6
+        #최초 재시도 지연시간(밀리초)
+        initial-interval: 1000
+        #재시도 지연 최대 시간(밀리초)
+        max-interval: 2000
+        #지연시간 계산 승수
+        multiplier: 1.1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        # HTTP를 통해 /actuator/refresh 엔드포인트를 노출한다.
+        include: refresh
