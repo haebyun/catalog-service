@@ -23,14 +23,14 @@ public class BookValidationTests {
 
     @Test
     void whenFieldsCorrectThenValidationSucceeds() {
-        Book book = new Book("1234567890", "Title", "Author", 9.90);
+        Book book = Book.of("1234567890", "Title", "Author", 9.90);
         Set<ConstraintViolation<Book>> violations = validator.validate(book);
         assertThat(violations).isEmpty();
     }
 
     @Test
     void whenIsbnDefinedButIncorrectThenValidationFails() {
-        Book book = new Book("a234567890", "Title", "Author", 9.90);
+        Book book = Book.of("a234567890", "Title", "Author", 9.90);
         Set<ConstraintViolation<Book>> violations = validator.validate(book);
         assertThat(violations).hasSize(1);
         assertThat(violations.iterator().next().getMessage())
@@ -60,7 +60,7 @@ public class BookValidationTests {
             "1234567890, Title, Author, , 1, 'The book price must be defined.'"
     })
     void whenFieldIsIncorrectThenValidationFails(String isbn, String title, String author, Double price, int expectedViolationCount, String expectedMessage) {
-        Book book = new Book(isbn, title, author, price);
+        Book book = Book.of(isbn, title, author, price);
         Set<ConstraintViolation<Book>> violations = validator.validate(book);
 
         assertThat(violations).hasSize(expectedViolationCount);
@@ -79,7 +79,7 @@ public class BookValidationTests {
             ", , Author, -0.01, 3"      // ISBN과 타이틀이 비어있고, 가격이 0보다 작은 경우
     })
     void whenMultipleFieldsAreIncorrectThenValidationFails(String isbn, String title, String author, Double price, int expectedViolationCount) {
-        Book book = new Book(isbn, title, author, price);
+        Book book = Book.of(isbn, title, author, price);
         Set<ConstraintViolation<Book>> violations = validator.validate(book);
 
         // 위반 개수만 검증
