@@ -6,3 +6,47 @@ server:
     threads:
       max: 50
       min-spare: 5
+
+polar:
+  greeting: Welcome to thee local book catalog!
+
+spring:
+  application:
+    name: catalog-service
+
+  config:
+    import: "optional:configserver:"
+
+  cloud:
+    config:
+      uri: http://localhost:8888
+      request-connect-timeout: 5000
+      request-read-timeout: 5000
+      #재시도를 켜야 하는 것이 원래 의도지만, 코드 제작 중에는 설정 서버를 키고있을 수 없으므로, 잠시 꺼놓자.
+      fail-fast: false
+      retry:
+        #시도의 최대 횟수
+        max-attempts: 6
+        #최초 재시도 지연시간(밀리초)
+        initial-interval: 1000
+        #재시도 지연 최대 시간(밀리초)
+        max-interval: 2000
+        #지연시간 계산 승수
+        multiplier: 1.1
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/polardb_catalog  # 컨테이너 포트 및 DB 이름
+    username: user
+    password: password
+    hikari:
+      #풀에서 연결 객체를 얻기 위해 기다려야 하는 최대 시간(밀리초)
+      connection-timeout: 2000
+      #히카리 CP가 풀에 최대한으로 유지할 수 있는 연결 객체의 수
+      maximum-pool-size: 5
+
+management:
+  endpoints:
+    web:
+      exposure:
+        # HTTP를 통해 /actuator/refresh 엔드포인트를 노출한다.
+        include: refresh

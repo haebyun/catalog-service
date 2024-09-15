@@ -3,7 +3,6 @@ package com.polarbookshop.catalogservice.web;
 import com.polarbookshop.catalogservice.domain.Book;
 import com.polarbookshop.catalogservice.domain.BookService;
 import jakarta.validation.Valid;
-import java.util.Iterator;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +24,7 @@ public class BookController {
     }
 
     @GetMapping
-    public Iterator<Book> get() {
+    public Iterable<Book> get() {
         return bookService.viewBookList();
     }
 
